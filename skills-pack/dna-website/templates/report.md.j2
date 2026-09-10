@@ -1,0 +1,122 @@
+# {{ config.domain }} — DNA Extract
+
+**Target:** {{ config.url }}
+**Generated:** {{ generated_at }}
+**Run flags:** depth={{ config.depth }}, max_pages={{ config.max_pages }}{% if config.auth_profile %}, auth={{ config.auth_profile.name }}{% endif %}
+
+---
+
+## Summary
+
+- **Pages captured:** {{ captures.successful }} / {{ captures.total }}{% if captures.failed %} ({{ captures.failed }} failed){% endif %}
+{%- if assets %}
+- **Assets:** {{ assets.stats.total - assets.stats.failed }} downloaded, {{ (assets.stats.total_bytes / 1024 / 1024) | round(1) }} MB total
+{%- endif %}
+- **Unique colors clustered:** {{ tokens.color.raw_clusters | length }}
+- **Font families:** {{ tokens.typography.families | length }}
+- **Component patterns:** {{ tokens.component_patterns_count if tokens.component_patterns_count is defined else "see analysis/component-patterns.json" }}
+
+{% if warnings %}
+## Warnings
+
+{% for w in warnings %}- {{ w }}
+{% endfor %}
+{% endif %}
+
+---
+
+## Design tokens
+
+### Colors
+
+**Brand**
+{% if tokens.color.brand.primary %}- Primary: `{{ tokens.color.brand.primary.value }}` (seen {{ tokens.color.brand.primary.frequency }}×){% endif %}
+{% if tokens.color.brand.secondary %}- Secondary: `{{ tokens.color.brand.secondary.value }}` (seen {{ tokens.color.brand.secondary.frequency }}×){% endif %}
+{% if not tokens.color.brand.primary %}- _No clear brand color identified — the site uses primarily neutrals._{% endif %}
+
+**Neutrals**
+{% for k, v in tokens.color.neutrals.items() %}- `neutrals.{{ k }}`: {{ v.value }}
+{% endfor %}
+
+**Accent**
+{% if tokens.color.accent.success %}- Success: `{{ tokens.color.accent.success.value }}`{% endif %}
+{% if tokens.color.accent.warning %}- Warning: `{{ tokens.color.accent.warning.value }}`{% endif %}
+{% if tokens.color.accent.danger %}- Danger:  `{{ tokens.color.accent.danger.value }}`{% endif %}
+{% if tokens.color.accent.info %}- Info:    `{{ tokens.color.accent.info.value }}`{% endif %}
+
+### Typography
+
+{% for name, fam in tokens.typography.families.items() %}- **{{ name }}**: {{ fam.primary }} _(stack: `{{ fam.stack }}`)_
+{% endfor %}
+
+Scale: ratio {{ tokens.typography.scale.ratio or "N/A" }}, base {{ tokens.typography.scale.base_px }}px
+
+| Token | px | rem |
+|---|---|---|
+{% for k, v in tokens.typography.scale.sizes.items() %}| {{ k }} | {{ v.px }} | {{ v.rem }} |
+{% endfor %}
+
+Weights: {{ tokens.typography.weights | join(", ") }}
+
+### Spacing
+
+Base unit: **{{ tokens.spacing.base_unit_px }}px**
+
+| Token | px | rem |
+|---|---|---|
+{% for k, v in tokens.spacing.scale.items() %}| {{ k }} | {{ v.px }} | {{ v.rem }} |
+{% endfor %}
+
+### Radii
+
+{% for k, v in tokens.radius.scale.items() %}- `{{ k }}`: {{ "9999px (full)" if v == 9999 else v ~ "px" }}
+{% endfor %}
+
+### Shadows
+
+{% for k, v in tokens.shadow.scale.items() %}- `{{ k }}`: `{{ v }}`
+{% endfor %}
+
+### Motion
+
+Durations: {% for k, v in tokens.motion.duration.items() %}`{{ k }}` ({{ v }}){{ ", " if not loop.last }}{% endfor %}
+
+Easings: {% for k, v in tokens.motion.easing.items() %}`{{ k }}` ({{ v }}){{ ", " if not loop.last }}{% endfor %}
+
+### Breakpoints
+
+{% for k, v in tokens.breakpoint.scale.items() %}- `{{ k }}`: {{ v }}
+{% endfor %}
+
+---
+
+## Information architecture
+
+See `analysis/information-architecture.json` for the full tree. Top-level structure:
+
+{% macro render_node(node, depth) %}{{ "  " * depth }}- [{{ node.title }}]({{ node.url }})
+{% for c in node.children %}{{ render_node(c, depth + 1) }}{% endfor %}{% endmacro %}
+{{ render_node(ia.root, 0) }}
+
+---
+
+## Pages
+
+| Slug | URL | Title |
+|---|---|---|
+{% for slug, page in content.pages.items() %}| `{{ slug }}` | {{ page.url }} | {{ page.title | truncate(60) }} |
+{% endfor %}
+
+---
+
+## Next steps
+
+1. Open the local inspector:
+   ```
+   node node_helpers/inspector_server.mjs {{ config.output_dir }}/inspector
+   ```
+   Then visit http://localhost:7777 — full clickable mirror with local assets.
+
+2. Edit `rebrand/tokens.template.json` to swap brand colors, fonts, and content placeholders for your own brand.
+
+3. Read `rebrand/README.md` for the full rebrand workflow.

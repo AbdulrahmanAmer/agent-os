@@ -12,7 +12,7 @@
       "name": "agent-os",
       "source": "./plugin",
       "description": "Layered project context that loads by stage, a router that fires the right skill, and a gate that enforces the stage instead of suggesting it.",
-      "version": "0.4.0"
+      "version": "0.5.0"
     }
   ]
 }

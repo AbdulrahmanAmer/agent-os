@@ -1,0 +1,213 @@
+/* OmniSuite design tokens — the seed for packages/tokens (@omnikom/tokens).
+ *
+ * Derived from seven dashboard references supplied by the owner. Writing the
+ * system down because the first attempt ignored all of it and produced a
+ * generic dark template.
+ *
+ * THE SYSTEM IN FOUR RULES
+ *
+ * 1. THREE SURFACE LEVELS CARRY THE HIERARCHY.
+ *    ground -> card -> hero. Cards separate by fill contrast and a soft shadow,
+ *    never a 1px outline. Exactly ONE hero card per view.
+ *
+ *    In LIGHT that hero card is black on white cards.
+ *    In DARK it INVERTS to light on dark cards - the same device, not a
+ *    broken one. Because it is token-driven, no component knows about it.
+ *
+ * 2. BENTO, NOT GRID. Cards differ in size and span; small cards nest in big.
+ *
+ * 3. MONOCHROME PLUS ALMOST NOTHING.
+ *
+ * 4. LIME IS THE BRAND SIGNAL, AND ITS USES ARE ENUMERATED - not "sparingly",
+ *    which is unenforceable and drifted to eleven places once already:
+ *      a. the primary button
+ *      b. MARY's own presence (her bubbles, her live dot, her step marks)
+ *      c. the current position in a deliberate sequence (onboarding progress,
+ *         tour ring and dot) - never "the newest item" or "the first row"
+ *    That is the whole list. Anything else uses ink or a status colour.
+ *    NEVER lime text on a light ground - #A8D41A on white is ~1.9:1. It is a
+ *    FILL behind near-black ink. Status colour is reserved and never doubles
+ *    as the brand accent.
+ *
+ * THEMING CONTRACT
+ *   :root                    = light, the complete palette
+ *   :root[data-theme="dark"] = dark, TOKENS ONLY
+ *   No component may declare a colour inside a theme block. If a value differs
+ *   between themes it becomes a token here, or dark mode silently breaks.
+ *
+ *   Anything drawn ON the hero card needs its own token (--hero-*), because
+ *   the hero surface inverts while the page does not.
+ */
+
+:root {
+  /* --- surfaces, in hierarchy order ------------------------------------- */
+  --ground:     #EFEEEB;   /* the page. warm grey, deliberately not white */
+  --card:       #FFFFFF;   /* every normal panel */
+  --card-sunk:  #F6F5F2;   /* a well inside a white card */
+  --hero:       #131311;   /* the ONE emphasis card */
+  --hero-sunk:  #232320;
+  --hairline:   #E4E2DD;
+
+  /* --- ink --------------------------------------------------------------- */
+  --ink:        #131311;
+  --ink-2:      #6B6862;   /* body copy. ~5.6:1 on white */
+  --ink-3:      #8A867E;   /* micro-labels and timestamps ONLY */
+  --on-hero:    #F7F6F3;
+  --on-hero-2:  #A5A29A;
+
+  /* --- the accent -------------------------------------------------------- */
+  /* #A8D41A is the LOCKED brand token from the live Omnikom site.
+   * The logo PNGs are #ACC805 - a real, pre-existing brand inconsistency.
+   * The live site already ships this exact pairing, so we match the site. */
+  --lime:       #A8D41A;
+  --lime-deep:  #8FB416;
+  --on-lime:    #14210A;
+
+  /* --- status. reserved, never a series colour --------------------------- */
+  --up:         #16794A;
+  --up-soft:    #E4F2E9;
+  --down:       #B03A2B;
+  --down-soft:  #FAE9E6;
+  --hold:       #2F5FBF;   /* human_review - its own colour, not a warning */
+  --hold-soft:  #E7EDFA;
+  --warn:       #8A5E10;
+  --warn-soft:  #FBF0DC;
+
+  /* --- drawn ON the hero card (which inverts between themes) ------------- */
+  --hero-track: rgba(255,255,255,.14);
+  --hero-line:  rgba(255,255,255,.10);
+  --hero-hold:  #86B4FF;
+  --hero-down:  #F0866E;
+  --hero-ramp-1: rgba(247,246,243,.85);
+  --hero-ramp-2: rgba(247,246,243,.58);
+  --hero-ramp-3: rgba(247,246,243,.36);
+  --hero-ramp-4: rgba(247,246,243,.20);
+
+  /* --- data ink. one hue, emphasis by lightness --------------------------- */
+  --data-1:     #131311;
+  --data-2:     #4A4843;
+  --data-3:     #85817A;
+  --data-4:     #C3BFB7;
+  --data-track: #E9E7E2;
+
+  /* --- the collapsed nav rail (chrome: dark in BOTH themes) -------------- */
+  --rail:        #131311;
+  --on-rail:     #F7F6F3;
+  --on-rail-2:   #8E8B84;
+  --rail-hover:  rgba(247,246,243,.10);
+
+  /* --- interaction states that used to be raw hex ------------------------ */
+  --hero-hover:      #2A2A26;
+  --hero-sunk-hover: #33332E;
+  --lime-pulse:      rgba(168,212,26,.5);
+  --scrim:           rgba(10,11,9,.66);
+
+  /* --- type -------------------------------------------------------------- */
+  --font-ui:   'Archivo', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-data: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  --t-xs:   0.6875rem;
+  --t-sm:   0.8125rem;
+  --t-md:   0.9375rem;
+  --t-lg:   1.0625rem;
+  --t-xl:   1.375rem;
+  --t-2xl:  1.875rem;
+  --t-3xl:  2.5rem;
+  --t-hero: 3.25rem;
+
+  /* --- space ------------------------------------------------------------- */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 20px; --s-6: 24px; --s-7: 32px; --s-8: 44px;
+
+  --gap: var(--s-5);
+  --pad: var(--s-6);
+
+  --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 26px; --r-pill: 999px;
+
+  --shadow:    0 1px 2px rgba(19,19,17,.04), 0 6px 16px rgba(19,19,17,.05);
+  --shadow-lg: 0 2px 4px rgba(19,19,17,.05), 0 18px 44px rgba(19,19,17,.10);
+
+  --focus-ring: 2px solid var(--ink);
+
+  /* --- motion ------------------------------------------------------------
+   * Adopted from the live Omnikom site (assets/css/tokens.css), not invented:
+   * --ease is its curve verbatim, and .7s is its stated ceiling for one-shot
+   * reveals. Before this the demo carried 3 easings and 10 durations.
+   * NOTHING animates outside this scale. */
+  --ease:     cubic-bezier(.2, 0, 0, 1);
+  --ease-pop: cubic-bezier(.2, .9, .3, 1.25);  /* marks landing, nothing else */
+  --t-hover:  .15s;   /* colour, background, opacity */
+  --t-move:   .2s;    /* small transforms */
+  --t-enter:  .45s;   /* reveals and mounts */
+  --t-page:   .6s;    /* route transitions - the ceiling */
+  --t-nav:    .28s;   /* the sidebar swap: long enough to read as a change */
+  --t-fade:   .13s;   /* half of the swap - one leg of the crossfade */
+
+  --track:    .09em;  /* one uppercase tracking value, was four */
+
+  --nav-w: 244px;
+}
+
+/* ═══════════════════════════════════════════════════════════════ dark ═══
+ * Not an inversion. Each step is chosen against its own surface: a flipped
+ * light palette produces grey-on-grey charts and glowing status colours.
+ */
+:root[data-theme='dark'] {
+  --ground:     #0C0D0B;
+  --card:       #171915;
+  --card-sunk:  #21241D;
+  /* the emphasis card becomes LIGHT - same hierarchy device, inverted */
+  --hero:       #F1F4EC;
+  --hero-sunk:  #DCE0D3;
+  --hairline:   #2A2E25;
+
+  --ink:        #F1F4EC;
+  --ink-2:      #A9A69E;   /* ~7:1 on --card */
+  --ink-3:      #7C7970;
+  --on-hero:    #131311;
+  --on-hero-2:  #5C5A54;
+
+  --up:         #6FCF97;
+  --up-soft:    rgba(111,207,151,.15);
+  --down:       #F0866E;
+  --down-soft:  rgba(240,134,110,.15);
+  --hold:       #86B4FF;
+  --hold-soft:  rgba(134,180,255,.15);
+  --warn:       #E0B44E;
+  --warn-soft:  rgba(224,180,78,.15);
+
+  /* the hero is light now, so anything on it flips too */
+  --hero-track: rgba(0,0,0,.10);
+  --hero-line:  rgba(0,0,0,.10);
+  --hero-hold:  #2F5FBF;
+  --hero-down:  #B03A2B;
+  --hero-ramp-1: rgba(19,19,17,.82);
+  --hero-ramp-2: rgba(19,19,17,.55);
+  --hero-ramp-3: rgba(19,19,17,.34);
+  --hero-ramp-4: rgba(19,19,17,.18);
+
+  /* bars sit on a dark card, so the data ramp runs light */
+  --data-1:     #E8EBE2;
+  --data-2:     #B7BAB0;
+  --data-3:     #7E8177;
+  --data-4:     #494C43;
+  --data-track: #262A22;
+
+  /* the rail stays dark in both themes - it is chrome, not content */
+  --rail:        #171915;
+  --on-rail:     #F1F4EC;
+  --on-rail-2:   #8A877F;
+  --rail-hover:  rgba(241,244,236,.10);
+
+  /* --hero inverts to LIGHT here, so its hover must go DARKER, not lighter.
+   * A raw #2A2A26 hover survived into dark mode as dark-on-dark. */
+  --hero-hover:      #DDE1D4;
+  --hero-sunk-hover: #CCD1C2;
+  --lime-pulse:      rgba(168,212,26,.45);
+  --scrim:           rgba(0,0,0,.72);
+
+  --shadow:    0 1px 2px rgba(0,0,0,.34), 0 6px 16px rgba(0,0,0,.30);
+  --shadow-lg: 0 2px 4px rgba(0,0,0,.36), 0 18px 44px rgba(0,0,0,.44);
+
+  --focus-ring: 2px solid var(--lime);
+}

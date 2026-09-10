@@ -1,12 +1,17 @@
 # Built artifacts - the zips are attached to releases, not committed.
 dist/
 
-# The skills pack is NOT published. 14 of its 15 skills come from third-party skill packs and
-# declare no licence of their own, so redistributing them here would be republishing other
-# people's work. It stays local; see NOTICE in the full bundle.
-skills-pack/
+# Never publish, at any size. These are the three things stripped from the skills pack:
+# a live login, captures of a private business site, and a reinstallable dependency tree.
+**/.dna-website.env
+**/real-projects/
+**/node_modules/
+**/.venv/
+**/outputs/
+**/clones/
 
 __pycache__/
 *.pyc
+.pytest_cache/
 _scratch*/
 _s/

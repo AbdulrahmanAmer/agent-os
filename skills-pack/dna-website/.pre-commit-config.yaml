@@ -1,0 +1,56 @@
+# Run with: `pre-commit run --all-files` or install via `pre-commit install`
+# See https://pre-commit.com
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: detect-private-key
+      - id: detect-aws-credentials
+        args: ['--allow-missing-credentials']
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.5.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: no-env-files
+        name: Block .env files
+        entry: |
+          bash -c '
+          if git diff --cached --name-only | grep -E "\.(env|env\..*)$" | grep -v "\.example$"; then
+            echo "✗ Refusing to commit .env file. Remove it or rename to .env.example."
+            exit 1
+          fi'
+        language: system
+        pass_filenames: false
+
+      - id: no-session-files
+        name: Block .session/ files
+        entry: |
+          bash -c '
+          if git diff --cached --name-only | grep -E "\.session/"; then
+            echo "✗ Refusing to commit .session/ files. These contain auth state."
+            exit 1
+          fi'
+        language: system
+        pass_filenames: false
+
+      - id: smoke-tests
+        name: Smoke tests
+        entry: pytest tests/test_smoke.py -q
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

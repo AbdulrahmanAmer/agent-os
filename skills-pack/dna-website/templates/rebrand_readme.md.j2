@@ -1,0 +1,77 @@
+# Rebrand layer for {{ domain }}
+
+This directory contains everything you need to convert the captured site into something you can rebuild with your own branding.
+
+## What's here
+
+| File | Purpose |
+|---|---|
+| `tokens.original.json` | The design tokens as extracted from the live site — read-only reference. |
+| `tokens.template.json` | Same tokens with brand colors and fonts replaced by `{{ "{{PLACEHOLDER}}" }}` strings. **Edit this.** |
+| `content.original.json` | All page copy, headings, CTAs — read-only reference. |
+| `content.template.json` | Same content with every string replaced by a `{{ "{{PAGE_X_Y_Z}}" }}` placeholder. **Edit this.** |
+| `swap-map.json` | The full original-to-placeholder mapping. {{ token_count }} tokens, {{ copy_count }} copy strings. |
+| `README.md` | This file. |
+
+## Rebrand workflow
+
+### 1. Edit the templates
+
+Open `tokens.template.json` and replace placeholders like `{{ "{{BRAND_PRIMARY}}" }}` with your hex colors, your font names, etc.
+
+Open `content.template.json` and replace placeholders like `{{ "{{PAGE_HOME_SECTION_0_HEADING}}" }}` with your real copy.
+
+### 2. Apply the swap
+
+A simple find-and-replace pass over the original captured HTML produces a "your-brand" version. The `swap-map.json` file is the lookup table.
+
+A starter rebuild script could look like this (Python):
+
+```python
+import json
+from pathlib import Path
+
+original_dir = Path("../raw/pages")
+output_dir = Path("./rebuilt")
+swap = json.loads(Path("swap-map.json").read_text())
+
+# 1. Build reverse map: placeholder -> your-value
+your_values = json.loads(Path("tokens.template.json").read_text())
+your_copy   = json.loads(Path("content.template.json").read_text())
+reverse = {**swap["tokens"], **swap["copy"]}   # original -> placeholder
+forward = {p: v for o, p in reverse.items() for v in [/* your replacement */] }
+
+# 2. Walk every rendered.html, do plain string replacement
+for page_dir in original_dir.iterdir():
+    rendered = (page_dir / "rendered.html").read_text()
+    for original, placeholder in reverse.items():
+        rendered = rendered.replace(original, forward.get(placeholder, placeholder))
+    (output_dir / f"{page_dir.name}.html").write_text(rendered)
+```
+
+This is a starting point — the actual rebrand will involve manual review and adjustment for context-sensitive substitutions (where the same string means different things on different pages).
+
+### 3. Inspect the result
+
+Open the rebuilt HTML in any browser, or run the inspector against your rebuilt output:
+
+```
+node node_helpers/inspector_server.mjs <rebuilt-dir>
+```
+
+### 4. Re-implement properly
+
+The rebrand layer is not a deployable site — it's reference material. The final step is using these tokens and content as the spec for a fresh implementation in your stack of choice (Next.js, Astro, Hugo, whatever).
+
+The clean handoff:
+- `tokens.template.json` → your design system / CSS variables / Tailwind theme
+- `content.template.json` → your CMS / Markdown files / data layer
+- `../analysis/component-patterns.json` → the components to build
+- `../analysis/information-architecture.json` → the routes and nav structure
+- `../raw/pages/<slug>/screenshot.desktop.png` → visual reference
+
+## Hard limits
+
+- The swap map applies plain string replacement. If a brand string is a substring of an unrelated string, you'll get bad swaps. Review every change.
+- Asset files (images, fonts, icons) are not rewritten by the swap map. You'll bring your own.
+- This tool produces reference material. **Don't publish the rebranded HTML as-is** — clone the design, not the implementation details.

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ domain }} — DNA Inspector</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      line-height: 1.5;
+    }
+    header {
+      padding: 2rem 3rem;
+      border-bottom: 1px solid #222;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    header .target {
+      color: #999;
+      font-family: ui-monospace, monospace;
+      font-size: 0.9rem;
+    }
+    nav {
+      padding: 1rem 3rem;
+      border-bottom: 1px solid #222;
+      display: flex;
+      gap: 1.5rem;
+    }
+    nav a {
+      color: #888;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    nav a:hover { color: #fff; }
+    main {
+      padding: 2rem 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .page-card {
+      background: #141414;
+      border: 1px solid #222;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .page-card:hover { border-color: #444; }
+    .page-card a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+    }
+    .page-card .thumb {
+      aspect-ratio: 16 / 10;
+      background: #1a1a1a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .page-card .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+    .page-card .meta {
+      padding: 1rem;
+    }
+    .page-card .meta h2 {
+      margin: 0 0 0.25rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #fff;
+    }
+    .page-card .meta p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #777;
+      font-family: ui-monospace, monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>{{ domain }}</h1>
+      <div class="target">{{ target_url }}</div>
+    </div>
+    <div class="target">{{ pages | length }} pages</div>
+  </header>
+  <nav>
+    <a href="/manifest.json">Manifest</a>
+    <a href="/tokens.css">Tokens (CSS)</a>
+    <a href="/analysis/design-tokens.json">Tokens (JSON)</a>
+    <a href="/analysis/content-inventory.json">Content</a>
+    <a href="/analysis/component-patterns.json">Components</a>
+  </nav>
+  <main>
+    {% for page in pages %}
+    <div class="page-card">
+      <a href="/{{ page.html }}">
+        <div class="thumb">
+          <img src="/{{ page.screenshot }}" alt="">
+        </div>
+        <div class="meta">
+          <h2>{{ page.title or page.slug }}</h2>
+          <p>{{ page.url }}</p>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </main>
+</body>
+</html>

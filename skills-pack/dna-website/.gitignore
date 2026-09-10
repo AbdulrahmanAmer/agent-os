@@ -1,0 +1,42 @@
+# Credentials — NEVER commit
+.dna-website.env
+.env
+*.env.local
+
+# Crawl outputs
+dna-output/
+outputs/
+*.session.json
+storage_state.json
+.session/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

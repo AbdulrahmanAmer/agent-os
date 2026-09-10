@@ -42,6 +42,16 @@ def scan(path):
         if not mode & 0o111:
             problems.append("not executable: %s (mode %s)" % (info.filename, oct(mode)))
 
+    # 3. CREDENTIALS. The skills pack is assembled by copying a live working tree, and that tree had
+    # a .dna-website.env holding a real login and password. A `.example` template alongside it is
+    # fine and expected; a populated one is a published credential.
+    for name in zf.namelist():
+        base = name.rsplit("/", 1)[-1]
+        if base.endswith(".example") or base.endswith(".sample"):
+            continue
+        if ".env" in base or base.endswith((".pem", ".key", ".p12")):
+            problems.append("possible credential file: %s" % name)
+
     label = path.replace("\\", "/").split("/")[-1]
     if problems:
         print("%s - %d PROBLEM(S):" % (label, len(problems)))

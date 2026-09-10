@@ -1,0 +1,54 @@
+{
+  "_comment": [
+    "The worked example: this repository's own code-index config, shipped so the ~10% that",
+    "binds a generator like this to a codebase's house conventions is visible rather than",
+    "described. Every field below encodes a convention THIS repo happens to follow; a repo",
+    "that writes its headers, flags or emphasis differently changes them here and changes",
+    "nothing in the generator.",
+    "",
+    "Honest note: the original repo this skill was first built in is not public, so the",
+    "worked example is this one. It exercises every field."
+  ],
+
+  "include": [".mjs"],
+  "exclude": ["node_modules", ".git", "dist", "coverage"],
+  "output": "CODE-INDEX.txt",
+
+  "_header": [
+    "House convention: `// name.mjs — what it is`, on one of the first few lines. The em",
+    "dash matters. A plain hyphen appears in ordinary prose, and matching it would claim the",
+    "first commented line of any file as its description."
+  ],
+  "header": { "pattern": "^\\s*//\\s*\\S+\\.mjs\\s+—\\s+(.+?)\\s*$", "maxLines": 4 },
+
+  "_cli": [
+    "A file has a command surface only if it reads process.argv. Without that condition,",
+    "every library mentioning a flag inside a help string acquires an imaginary CLI."
+  ],
+  "cli": { "argvPattern": "process\\.argv", "flagPattern": "--[a-z][a-z0-9-]*" },
+
+  "_why": [
+    "Emphasis convention: this codebase SHOUTS its load-bearing invariants inside comments",
+    "('NO TOOL-RESULT CONTENT ... IS EVER PRINTED'). Three or more consecutive capitalised",
+    "words in a comment is the signal. Capped at 2 per file — WHY is a pointer to the thing",
+    "worth reading, not a second copy of it."
+  ],
+  "why": { "pattern": "\\b([A-Z][A-Z0-9'’-]*(?:\\s+[A-Z][A-Z0-9'’-]*){2,})\\b", "max": 2 },
+
+  "_guard": [
+    "Where the checks live. Test files are deliberately included: they are the group that",
+    "breaks first when an export changes, and the first version of this excluded them and",
+    "so reported the most reliable early warning in the repo as absent."
+  ],
+  "guard": { "patterns": ["(^|/)scripts/test/", "\\.test\\.", "(^|/)check-", "(^|/)\\.github/"] },
+
+  "_manifestThreshold": [
+    "A file naming more than this share of the ELIGIBLE files is a register, not a caller.",
+    "The denominator is the eligible set — the files this index covers — never the whole",
+    "tree. Against the whole tree, padding a repo with docs makes a register look like a",
+    "minority and it slips back through as a caller of everything."
+  ],
+  "manifestThreshold": 0.5,
+
+  "spawn": { "callPattern": "\\b(spawn|spawnSync|exec|execSync|execFile|execFileSync|fork)\\b" }
+}

@@ -1,0 +1,45 @@
+[project]
+name = "dna-website"
+version = "0.1.0"
+description = "Extract a complete website DNA package — routes, assets, design tokens, content — into a local inspectable directory."
+requires-python = ">=3.11"
+dependencies = [
+    "playwright>=1.45",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.0",
+    "tinycss2>=1.3",
+    "cssutils>=2.11",
+    "Pillow>=10.0",
+    "colorthief>=0.2.1",
+    "scikit-learn>=1.5",
+    "numpy>=1.26",
+    "aiohttp>=3.9",
+    "typer>=0.12",
+    "pydantic>=2.7",
+    "jinja2>=3.1",
+    "python-dotenv>=1.0",
+    "rich>=13.7",
+    "tldextract>=5.1",
+    "tenacity>=8.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5",
+]
+
+[project.scripts]
+dna-website = "scripts.run:app"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["scripts*"]

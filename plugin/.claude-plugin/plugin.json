@@ -1,7 +1,7 @@
 {
   "name": "agent-os",
   "displayName": "Agent OS",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Gives every project a stage. Injects only the current stage's contract at session start, routes work to the right skill by situation instead of by vibes, and denies the edits the current stage forbids. Hooks fail open.",
   "author": {
     "name": "AbdulrahmanAmer"

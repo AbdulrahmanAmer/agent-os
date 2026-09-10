@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{{ slug }} — DNA Inspector</title>
+  <style>
+    body { margin: 0; }
+    .dna-toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 36px;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      z-index: 999999;
+      border-bottom: 1px solid #222;
+    }
+    .dna-toolbar a { color: #999; text-decoration: none; margin-right: 1rem; }
+    .dna-toolbar a:hover { color: #fff; }
+    .dna-toolbar code {
+      font-family: ui-monospace, monospace;
+      color: #888;
+    }
+    .dna-page-frame {
+      margin-top: 36px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dna-toolbar">
+    <div>
+      <a href="/">← back to index</a>
+      <code>{{ url }}</code>
+    </div>
+    <div>
+      <a href="/raw/pages/{{ slug }}/source.html">view source</a>
+      <a href="/raw/pages/{{ slug }}/rendered.html">view rendered</a>
+      <a href="/raw/pages/{{ slug }}/computed-styles.json">styles</a>
+      <a href="/raw/pages/{{ slug }}/network-log.json">network</a>
+    </div>
+  </div>
+  <div class="dna-page-frame">
+    {{ page_html | safe }}
+  </div>
+</body>
+</html>
