@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "agent-os",
+  "owner": {
+    "name": "AbdulrahmanAmer"
+  },
+  "metadata": {
+    "description": "Marketplace for agent-os (single plugin)."
+  },
+  "plugins": [
+    {
+      "name": "agent-os",
+      "source": "./plugin",
+      "description": "Layered project context that loads by stage, a router that fires the right skill, and a gate that enforces the stage instead of suggesting it.",
+      "version": "0.4.0"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Shell scripts MUST keep LF endings. A hook checked out with CRLF fails on macOS and Linux with
+# "bad interpreter: /bin/sh^M" - the same class of works-on-the-build-machine defect as shipping
+# them without the executable bit.
+*.sh text eol=lf
+*.py text eol=lf
+
+# Everything else: normalise in the repo, let git decide on checkout.
+* text=auto

@@ -1,0 +1,59 @@
+{
+  "_comment": "The default stage sequence. A project overrides a stage by putting its own layers/L2-stages/stage-N.md in .agent-os/. deny/allow are matched against the project-relative path of the file being written; allow wins.",
+  "stages": [
+    {
+      "id": 0,
+      "name": "SHAPE",
+      "intent": "Decide what the thing IS. Conversation, research, written options with tradeoffs, throwaway sketches. Nothing that assumes an answer.",
+      "gate": "Every open decision in the state file is answered in writing and the operator says the gate is met.",
+      "why": "Code written before the scope decision is the most expensive code in a project: it does not just get deleted, it quietly constrains the decision it preceded.",
+      "deny": ["src/**", "app/**", "lib/**", "supabase/migrations/**", "migrations/**", "prisma/**", "package.json", "wrangler.toml", "wrangler.jsonc", "next.config.js", "next.config.ts", "vite.config.ts", "*.sql"],
+      "allow": ["docs/**", "mocks/**", "design/**", ".agent-os/**", ".claude/**", "*.md", "README.md"]
+    },
+    {
+      "id": 1,
+      "name": "DESIGN DIRECTION",
+      "intent": "Pick the direction by looking at real rendered options side by side, not by describing them. Several fundamentally different ones, each with its argument written down.",
+      "gate": "A named winner in the state file, what was salvaged from the losers, and the winning direction written down as a token system before any component consumes it.",
+      "why": "A design chosen from prose is a design chosen from training. The browser is the only honest judge.",
+      "deny": ["src/**", "app/**", "supabase/migrations/**", "migrations/**", "*.sql"],
+      "allow": ["mocks/**", "design/**", "docs/**", ".agent-os/**", ".claude/**", "*.md"]
+    },
+    {
+      "id": 2,
+      "name": "SYSTEM DESIGN",
+      "intent": "Write the software down before writing it: routes, data model, auth, third-party surfaces and their failure modes, deploy topology, environments, and what is out of scope for v1.",
+      "gate": "The plan file exists, the operator has read it, and the build is sliced into pieces that each fit one session and each have a verifiable exit.",
+      "why": "A multi-session build that lives in a context window is re-derived every session, differently each time.",
+      "deny": ["src/**", "app/**"],
+      "allow": ["docs/**", "design/**", ".agent-os/**", ".claude/**", "*.md"]
+    },
+    {
+      "id": 3,
+      "name": "BUILD",
+      "intent": "Work the plan in order, one slice at a time, each slice ending in something that renders and is verified.",
+      "gate": "Every slice in the plan is closed, each verified when it landed rather than all at the end.",
+      "why": "",
+      "deny": [],
+      "allow": []
+    },
+    {
+      "id": 4,
+      "name": "HARDEN",
+      "intent": "Error paths, empty and loading states, 404 and 500, forms that fail well, accessibility, real metadata, performance on a slow connection, security headers, rate limits, and logging that reports a break before the operator finds it.",
+      "gate": "No mock data on a reachable path, no stub or TODO in a shipped path, no client-only validation, no secret in the bundle, and every feature observable in production.",
+      "why": "",
+      "deny": [],
+      "allow": []
+    },
+    {
+      "id": 5,
+      "name": "LAUNCH AND ITERATE",
+      "intent": "Deploy, verify against production rather than against the build, watch it, then iterate in slices.",
+      "gate": "Verified in production, and new work re-enters at the stage it needs rather than at BUILD because the repo already exists.",
+      "why": "",
+      "deny": [],
+      "allow": []
+    }
+  ]
+}

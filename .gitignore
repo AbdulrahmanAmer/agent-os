@@ -1,0 +1,12 @@
+# Built artifacts - the zips are attached to releases, not committed.
+dist/
+
+# The skills pack is NOT published. 14 of its 15 skills come from third-party skill packs and
+# declare no licence of their own, so redistributing them here would be republishing other
+# people's work. It stays local; see NOTICE in the full bundle.
+skills-pack/
+
+__pycache__/
+*.pyc
+_scratch*/
+_s/
